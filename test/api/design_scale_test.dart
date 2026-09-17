@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('exposes a virtual MediaQuery and scope below MaterialApp.builder', (
+  testWidgets(
+      'exposes a virtual MediaQuery and scope below MaterialApp.builder', (
     tester,
   ) async {
     tester.view.devicePixelRatio = 1;
