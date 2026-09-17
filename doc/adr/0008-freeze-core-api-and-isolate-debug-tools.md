@@ -15,7 +15,7 @@ Diagnostics are useful during adoption, but adding debug UI to the primary packa
 2. Keep rendering, MediaQuery, and geometry adapters private under `lib/src`.
 3. Publish debug helpers through the secondary library `package:design_scale/design_scale_debug.dart`.
 4. Keep the debug overlay inactive in profile and release builds.
-5. Document the intended compatibility promise in `docs/public-api.md`.
+5. Document the intended compatibility promise in `doc/public-api.md`.
 6. Use the `0.1.0-rc.x` series for real-app validation before a `1.0.0` semantic-versioning guarantee.
 
 ## Consequences
