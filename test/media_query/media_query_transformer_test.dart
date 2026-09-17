@@ -15,7 +15,7 @@ void main() {
       viewPadding: EdgeInsets.fromLTRB(24, 48, 24, 72),
       viewInsets: EdgeInsets.only(bottom: 600),
       systemGestureInsets: EdgeInsets.all(16),
-      gestureSettings: DeviceGestureSettings(touchSlop: 18),
+      gestureSettings: DeviceGestureSettings(touchSlop: 24),
       accessibleNavigation: true,
       highContrast: true,
       displayFeatures: <ui.DisplayFeature>[
@@ -41,7 +41,7 @@ void main() {
     );
     expect(transformed.viewInsets, const EdgeInsets.only(bottom: 300));
     expect(transformed.systemGestureInsets, const EdgeInsets.all(8));
-    expect(transformed.gestureSettings.touchSlop, 9);
+    expect(transformed.gestureSettings.touchSlop, 12);
     expect(transformed.displayFeatures, hasLength(1));
     expect(
       transformed.displayFeatures.single.bounds,
