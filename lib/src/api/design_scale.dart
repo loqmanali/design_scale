@@ -19,7 +19,7 @@ class DesignScale extends StatelessWidget {
     required this.child,
     ScalePolicy policy = const ContainScalePolicy(),
     ScaleLimits limits = const ScaleLimits(),
-  }) : config = DesignScaleConfig(
+  }) : config = const DesignScaleConfig(
          referenceSize: referenceSize,
          policy: policy,
          limits: limits,
