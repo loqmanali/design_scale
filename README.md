@@ -160,12 +160,12 @@ CI checks formatting, static analysis, tests/goldens, the example application, c
 
 ## Public API
 
-The intended release-candidate surface is documented in [`docs/public-api.md`](docs/public-api.md). Rendering and geometry implementation under `lib/src` are private and unsupported imports.
+The intended release-candidate surface is documented in [`doc/public-api.md`](doc/public-api.md). Rendering and geometry implementation under `lib/src` are private and unsupported imports.
 
 ## Migration
 
-- [From responsive_zoom](docs/migration/from_responsive_zoom.md)
-- [From flutter_screenutil](docs/migration/from_flutter_screenutil.md)
+- [From responsive_zoom](doc/migration/from_responsive_zoom.md)
+- [From flutter_screenutil](doc/migration/from_flutter_screenutil.md)
 
 ## Performance
 
@@ -173,4 +173,4 @@ A non-gating benchmark harness is available under [`benchmark/`](benchmark/). Ti
 
 ## Architecture
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) and [docs/adr](docs/adr) for architectural drivers, invariants, rendering decisions, compatibility policy, and rationale.
+See [ARCHITECTURE.md](ARCHITECTURE.md) and [doc/adr](doc/adr) for architectural drivers, invariants, rendering decisions, compatibility policy, and rationale.
