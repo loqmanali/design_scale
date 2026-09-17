@@ -48,9 +48,9 @@ final class RenderDesignScaleViewport extends RenderProxyBox {
     required double scale,
     required Size virtualSize,
     RenderBox? child,
-  }) : _scale = _validateScale(scale),
-       _virtualSize = _validateVirtualSize(virtualSize),
-       super(child);
+  })  : _scale = _validateScale(scale),
+        _virtualSize = _validateVirtualSize(virtualSize),
+        super(child);
 
   double _scale;
 
@@ -220,8 +220,7 @@ final class RenderDesignScaleViewport extends RenderProxyBox {
   }
 
   static Size _validateVirtualSize(Size value) {
-    final isValid =
-        value.width.isFinite &&
+    final isValid = value.width.isFinite &&
         value.height.isFinite &&
         value.width > 0 &&
         value.height > 0;
