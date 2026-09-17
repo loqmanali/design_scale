@@ -21,7 +21,7 @@ Use this checklist before publishing a release candidate or stable version.
 
 ## API and docs
 
-- [ ] `docs/public-api.md` matches `lib/design_scale.dart`.
+- [ ] `doc/public-api.md` matches `lib/design_scale.dart`.
 - [ ] Debug-only APIs remain in `lib/design_scale_debug.dart`.
 - [ ] README usage matches the example application.
 - [ ] CHANGELOG contains the release version and notable behavior changes.
