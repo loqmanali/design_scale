@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-rc.1
+
+- Freeze the release-candidate core public API.
+- Add a secondary `design_scale_debug.dart` library with runtime diagnostics and a debug-only overlay.
+- Add a runnable example demonstrating app-builder integration, normal Flutter dimensions, adaptive composition, keyboard behavior, and diagnostics.
+- Add public API and migration documentation.
+- Add a non-gating viewport performance benchmark harness.
+- Strengthen CI with formatting, example validation, coverage execution, and pub publish dry-run checks.
+
 ## 0.1.0-dev.3
 
 - Transform fold, hinge, and cutout bounds into virtual design coordinates.
