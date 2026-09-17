@@ -1,4 +1,4 @@
-/// Optional bounds applied to a scale resolved by a [ScalePolicy].
+/// Optional bounds applied to a scale resolved by a `ScalePolicy`.
 class ScaleLimits {
   const ScaleLimits({this.min, this.max})
     : assert(min == null || min > 0),
@@ -27,4 +27,13 @@ class ScaleLimits {
 
     return result;
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is ScaleLimits && other.min == min && other.max == max;
+  }
+
+  @override
+  int get hashCode => Object.hash(min, max);
 }

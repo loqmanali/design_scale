@@ -4,7 +4,7 @@ import '../domain/scale_limits.dart';
 import '../domain/scale_policy.dart';
 import '../policies/contain_scale_policy.dart';
 
-/// Immutable configuration used by a [DesignScale] subtree.
+/// Immutable configuration used by a `DesignScale` subtree.
 class DesignScaleConfig {
   const DesignScaleConfig({
     required this.referenceSize,
@@ -21,4 +21,16 @@ class DesignScaleConfig {
 
   /// Optional lower and upper bounds applied to the raw scale.
   final ScaleLimits limits;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is DesignScaleConfig &&
+            other.referenceSize == referenceSize &&
+            other.policy == policy &&
+            other.limits == limits;
+  }
+
+  @override
+  int get hashCode => Object.hash(referenceSize, policy, limits);
 }

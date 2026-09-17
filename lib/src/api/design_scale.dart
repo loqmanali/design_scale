@@ -15,24 +15,37 @@ import 'design_scale_scope.dart';
 class DesignScale extends StatelessWidget {
   const DesignScale({
     super.key,
-    required this.referenceSize,
+    required Size referenceSize,
     required this.child,
-    this.policy = const ContainScalePolicy(),
-    this.limits = const ScaleLimits(),
-  }) : assert(referenceSize.width > 0),
-       assert(referenceSize.height > 0);
+    ScalePolicy policy = const ContainScalePolicy(),
+    ScaleLimits limits = const ScaleLimits(),
+  }) : config = DesignScaleConfig(
+         referenceSize: referenceSize,
+         policy: policy,
+         limits: limits,
+       );
 
-  /// Design frame against which dimensions were authored.
-  final Size referenceSize;
+  /// Creates a scaled subtree from an explicit immutable configuration object.
+  const DesignScale.config({
+    super.key,
+    required this.config,
+    required this.child,
+  });
 
-  /// Strategy that resolves a single uniform scale.
-  final ScalePolicy policy;
-
-  /// Optional bounds for the scale resolved by [policy].
-  final ScaleLimits limits;
+  /// Configuration that drives scale resolution for this subtree.
+  final DesignScaleConfig config;
 
   /// Widget subtree rendered in the virtual design coordinate system.
   final Widget child;
+
+  /// Design frame against which dimensions were authored.
+  Size get referenceSize => config.referenceSize;
+
+  /// Strategy that resolves a single uniform scale.
+  ScalePolicy get policy => config.policy;
+
+  /// Optional bounds for the scale resolved by [policy].
+  ScaleLimits get limits => config.limits;
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +56,6 @@ class DesignScale extends StatelessWidget {
         'CupertinoApp.builder, or below an equivalent MediaQuery boundary.',
       );
     }
-
-    final config = DesignScaleConfig(
-      referenceSize: referenceSize,
-      policy: policy,
-      limits: limits,
-    );
 
     final result = policy.resolve(
       ScaleInput(

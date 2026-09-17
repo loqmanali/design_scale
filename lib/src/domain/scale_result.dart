@@ -50,6 +50,28 @@ class ScaleResult {
   /// Viewport exposed to the scaled child coordinate system.
   final Size virtualSize;
 
-  /// Whether [scale] differs from [rawScale] because of [ScaleLimits].
+  /// Whether [scale] differs from [rawScale] because of scale limits.
   final bool isClamped;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is ScaleResult &&
+            other.rawScale == rawScale &&
+            other.scale == scale &&
+            other.viewportSize == viewportSize &&
+            other.referenceSize == referenceSize &&
+            other.virtualSize == virtualSize &&
+            other.isClamped == isClamped;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    rawScale,
+    scale,
+    viewportSize,
+    referenceSize,
+    virtualSize,
+    isClamped,
+  );
 }

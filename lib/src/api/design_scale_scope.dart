@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../config/design_scale_config.dart';
 import '../domain/scale_result.dart';
 
-/// Runtime scaling information exposed to descendants of [DesignScale].
+/// Runtime scaling information exposed to descendants of `DesignScale`.
 class DesignScaleScope extends InheritedWidget {
   const DesignScaleScope({
     super.key,
@@ -19,9 +19,11 @@ class DesignScaleScope extends InheritedWidget {
   final ScaleResult result;
 
   static DesignScaleScope of(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<DesignScaleScope>();
-    assert(scope != null, 'No DesignScaleScope found in this context.');
-    return scope!;
+    final scope = maybeOf(context);
+    if (scope == null) {
+      throw FlutterError('No DesignScaleScope found in this context.');
+    }
+    return scope;
   }
 
   static DesignScaleScope? maybeOf(BuildContext context) {
@@ -30,9 +32,6 @@ class DesignScaleScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(DesignScaleScope oldWidget) {
-    return oldWidget.result.scale != result.scale ||
-        oldWidget.result.virtualSize != result.virtualSize ||
-        oldWidget.config.referenceSize != config.referenceSize ||
-        oldWidget.config.policy.runtimeType != config.policy.runtimeType;
+    return oldWidget.config != config || oldWidget.result != result;
   }
 }

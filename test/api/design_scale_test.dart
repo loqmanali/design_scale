@@ -39,6 +39,31 @@ void main() {
     expect(observedScope!.result.virtualSize, const Size(400, 800));
   });
 
+  testWidgets('accepts an explicit immutable config', (tester) async {
+    const config = DesignScaleConfig(referenceSize: Size(400, 800));
+    DesignScaleScope? observedScope;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        builder: (context, child) {
+          return DesignScale.config(
+            config: config,
+            child: Builder(
+              builder: (context) {
+                observedScope = DesignScaleScope.of(context);
+                return const SizedBox.shrink();
+              },
+            ),
+          );
+        },
+        home: const SizedBox.shrink(),
+      ),
+    );
+
+    expect(observedScope, isNotNull);
+    expect(observedScope!.config, config);
+  });
+
   testWidgets('fails with an actionable error when MediaQuery is missing', (
     tester,
   ) async {
