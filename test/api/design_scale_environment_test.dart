@@ -26,7 +26,7 @@ void main() {
             viewPadding: EdgeInsets.only(top: 40),
             viewInsets: EdgeInsets.only(bottom: 400),
             systemGestureInsets: EdgeInsets.symmetric(horizontal: 24),
-            gestureSettings: DeviceGestureSettings(touchSlop: 18),
+            gestureSettings: DeviceGestureSettings(touchSlop: 24),
             highContrast: true,
             boldText: true,
             displayFeatures: <ui.DisplayFeature>[
@@ -67,7 +67,7 @@ void main() {
         observedMediaQuery!.systemGestureInsets,
         const EdgeInsets.symmetric(horizontal: 12),
       );
-      expect(observedMediaQuery!.gestureSettings.touchSlop, 9);
+      expect(observedMediaQuery!.gestureSettings.touchSlop, 12);
       expect(observedMediaQuery!.textScaler.scale(10), 15);
       expect(observedMediaQuery!.highContrast, isTrue);
       expect(observedMediaQuery!.boldText, isTrue);
