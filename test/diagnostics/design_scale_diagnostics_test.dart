@@ -10,8 +10,6 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
 
-    DesignScaleDiagnostics? diagnostics;
-
     await tester.pumpWidget(
       const MediaQuery(
         data: MediaQueryData(size: Size(800, 1600)),
@@ -25,15 +23,17 @@ void main() {
       ),
     );
 
-    diagnostics = _DiagnosticsProbe.lastValue;
+    final diagnostics = _DiagnosticsProbe.lastValue;
+    if (diagnostics == null) {
+      fail('Expected DesignScale diagnostics to be captured.');
+    }
 
-    expect(diagnostics, isNotNull);
-    expect(diagnostics!.referenceSize, const Size(400, 800));
-    expect(diagnostics!.viewportSize, const Size(800, 1600));
-    expect(diagnostics!.virtualSize, const Size(400, 800));
-    expect(diagnostics!.scale, 2);
-    expect(diagnostics!.policyName, 'ContainScalePolicy');
-    expect(diagnostics!.toMultilineString(), contains('scale: 2.0000'));
+    expect(diagnostics.referenceSize, const Size(400, 800));
+    expect(diagnostics.viewportSize, const Size(800, 1600));
+    expect(diagnostics.virtualSize, const Size(400, 800));
+    expect(diagnostics.scale, 2);
+    expect(diagnostics.policyName, 'ContainScalePolicy');
+    expect(diagnostics.toMultilineString(), contains('scale: 2.0000'));
   });
 
   testWidgets('renders the debug overlay below DesignScale', (tester) async {
