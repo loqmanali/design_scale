@@ -52,7 +52,6 @@ void main() {
                         child: ColoredBox(color: Color(0xFFFF0000)),
                       ),
                       Align(
-                        alignment: Alignment.center,
                         child: SizedBox(
                           width: 20,
                           height: 20,
