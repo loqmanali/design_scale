@@ -1,6 +1,6 @@
 name: design_scale
 description: Reference-based design scaling for Flutter with uniform viewport scaling and native accessibility preservation.
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 homepage: https://github.com/loqmanali/design_scale
 repository: https://github.com/loqmanali/design_scale
 issue_tracker: https://github.com/loqmanali/design_scale/issues
