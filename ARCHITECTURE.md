@@ -18,6 +18,7 @@ In priority order:
 6. **Extensibility** — new scale policies can be added without changing the rendering API.
 7. **Performance** — scale resolution is O(1) and no external runtime dependency is required.
 8. **Simplicity** — the default public API remains small.
+9. **Release stability** — implementation details must remain replaceable behind a deliberate public contract.
 
 ## 3. Invariants
 
@@ -31,6 +32,7 @@ In priority order:
 - Integration happens below `MaterialApp`/`CupertinoApp` through their builder callback.
 - Layout, paint, hit testing, coordinate conversion, and semantics use the same transform.
 - Every logical-pixel position or distance exposed below `DesignScale` belongs to the virtual coordinate system.
+- Rendering, MediaQuery adapters, geometry transformers, and diagnostics implementation remain replaceable details.
 
 ## 4. Runtime flow
 
@@ -58,6 +60,10 @@ transform      | layout / paint / hit test / semantics
 ## 5. Layers
 
 ```text
+lib/
+  design_scale.dart        Stable core public barrel
+  design_scale_debug.dart  Optional secondary debug barrel
+
 lib/src/
   api/          Public widget and inherited scope
   config/       Public immutable configuration values
@@ -65,9 +71,10 @@ lib/src/
   policies/     Scale-policy implementations
   media_query/  Window geometry and MediaQuery adapters
   rendering/    Internal render viewport and coordinate mapping
+  diagnostics/  Optional debug snapshot and overlay
 ```
 
-Dependency direction is toward the domain contracts. Rendering and Flutter adapters may depend on domain types; domain math does not depend on widget state or app lifecycle.
+Dependency direction is toward the domain contracts. Rendering and Flutter adapters may depend on domain types; domain math does not depend on widget state or app lifecycle. The core barrel does not export rendering, MediaQuery, geometry, or diagnostics implementation types.
 
 ## 6. Default scale policy
 
@@ -111,14 +118,29 @@ The render object:
 - publishes the same transform through `applyPaintTransform` for coordinate conversion and semantics;
 - scales intrinsic dimensions and baselines into parent coordinates.
 
-The rendering implementation is not exported. Consumers depend only on `DesignScale`, `DesignScaleConfig`, the scale-policy contracts, and `DesignScaleScope`.
+The rendering implementation is not exported. Consumers depend only on the documented core public API.
 
-## 9. Verification strategy
+## 9. Public API and diagnostics boundary
+
+The release-candidate core surface is documented in `docs/public-api.md`. Debug diagnostics are intentionally exported from `package:design_scale/design_scale_debug.dart` rather than the core barrel.
+
+This allows diagnostic presentation to evolve without forcing applications that only need scaling to depend on debug-specific UI. `DesignScaleDebugOverlay` is inactive outside debug builds.
+
+## 10. Verification strategy
 
 - **Unit:** policy math, limits, invalid configuration, and window-geometry conversion.
-- **Widget:** transformed `MediaQuery`, accessibility preservation, keyboard, foldable, resize, rotation, and split-screen scenarios.
+- **Widget:** transformed `MediaQuery`, accessibility preservation, keyboard, foldable, resize, rotation, split-screen, diagnostics, and public API scenarios.
 - **Rendering:** virtual layout, paint transform, hit testing, coordinate conversion, semantics geometry, and runtime updates.
 - **Golden:** deterministic reference, large portrait, split-width, and landscape output.
+- **Example:** a separate package is analyzed and tested against the local package dependency.
 - **Compatibility:** the full analyzer and test suite run on Flutter 3.19.0 and the current stable channel.
+- **Publishing:** CI performs a pub publish dry run before merge.
+- **Performance:** a controlled, non-gating benchmark harness records repeated viewport-change cost without flaky shared-runner thresholds.
 
 Every production bug in scale calculation or coordinate transformation should become a regression test.
+
+## 11. Release policy
+
+The `0.1.0-rc.x` series is the real-application validation period for the documented API contract. New scale policies and rendering options are intentionally deferred until the existing contracts have been validated outside the package test suite.
+
+A `1.0.0` release will adopt semantic-versioning compatibility guarantees for the core public API.
