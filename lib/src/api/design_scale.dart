@@ -6,6 +6,7 @@ import '../domain/scale_limits.dart';
 import '../domain/scale_policy.dart';
 import '../media_query/media_query_transformer.dart';
 import '../policies/contain_scale_policy.dart';
+import '../rendering/design_scale_viewport.dart';
 import 'design_scale_scope.dart';
 
 /// Creates a uniform virtual design viewport for [child].
@@ -78,23 +79,15 @@ class DesignScale extends StatelessWidget {
       virtualSize: result.virtualSize,
     );
 
-    return SizedBox(
-      width: mediaQuery.size.width,
-      height: mediaQuery.size.height,
-      child: FittedBox(
-        alignment: Alignment.topLeft,
-        fit: BoxFit.fill,
-        child: SizedBox(
-          width: result.virtualSize.width,
-          height: result.virtualSize.height,
-          child: MediaQuery(
-            data: transformedMediaQuery,
-            child: DesignScaleScope(
-              config: config,
-              result: result,
-              child: child,
-            ),
-          ),
+    return DesignScaleViewport(
+      scale: result.scale,
+      virtualSize: result.virtualSize,
+      child: MediaQuery(
+        data: transformedMediaQuery,
+        child: DesignScaleScope(
+          config: config,
+          result: result,
+          child: child,
         ),
       ),
     );
