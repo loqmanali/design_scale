@@ -10,8 +10,7 @@ class DesignScaleConfig {
     required this.referenceSize,
     this.policy = const ContainScalePolicy(),
     this.limits = const ScaleLimits(),
-  }) : assert(referenceSize.width > 0),
-       assert(referenceSize.height > 0);
+  });
 
   /// The design frame against which the UI was authored.
   final Size referenceSize;

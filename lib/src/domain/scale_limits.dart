@@ -13,6 +13,8 @@ class ScaleLimits {
 
   /// Applies the configured bounds to [value].
   double apply(double value) {
+    _validate();
+
     var result = value;
 
     final minValue = min;
@@ -26,6 +28,21 @@ class ScaleLimits {
     }
 
     return result;
+  }
+
+  void _validate() {
+    final minValue = min;
+    final maxValue = max;
+
+    if (minValue != null && (!minValue.isFinite || minValue <= 0)) {
+      throw StateError('ScaleLimits.min must be finite and greater than zero.');
+    }
+    if (maxValue != null && (!maxValue.isFinite || maxValue <= 0)) {
+      throw StateError('ScaleLimits.max must be finite and greater than zero.');
+    }
+    if (minValue != null && maxValue != null && minValue > maxValue) {
+      throw StateError('ScaleLimits.min cannot be greater than ScaleLimits.max.');
+    }
   }
 
   @override

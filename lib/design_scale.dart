@@ -1,5 +1,3 @@
-library design_scale;
-
 export 'src/api/design_scale.dart';
 export 'src/api/design_scale_scope.dart';
 export 'src/config/design_scale_config.dart';

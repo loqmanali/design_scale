@@ -46,5 +46,29 @@ void main() {
       expect(result.rawScale, greaterThan(1.2));
       expect(result.isClamped, isTrue);
     });
+
+    test('rejects non-positive viewport dimensions', () {
+      expect(
+        () => policy.resolve(
+          const ScaleInput(
+            viewportSize: Size.zero,
+            referenceSize: Size(375, 812),
+          ),
+        ),
+        throwsArgumentError,
+      );
+    });
+
+    test('rejects non-positive reference dimensions', () {
+      expect(
+        () => policy.resolve(
+          const ScaleInput(
+            viewportSize: Size(375, 812),
+            referenceSize: Size.zero,
+          ),
+        ),
+        throwsArgumentError,
+      );
+    });
   });
 }
