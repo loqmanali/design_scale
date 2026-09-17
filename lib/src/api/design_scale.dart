@@ -15,37 +15,38 @@ import 'design_scale_scope.dart';
 class DesignScale extends StatelessWidget {
   const DesignScale({
     super.key,
-    required Size referenceSize,
+    required this.referenceSize,
     required this.child,
-    ScalePolicy policy = const ContainScalePolicy(),
-    ScaleLimits limits = const ScaleLimits(),
-  }) : config = const DesignScaleConfig(
-         referenceSize: referenceSize,
-         policy: policy,
-         limits: limits,
-       );
-
-  /// Creates a scaled subtree from an explicit immutable configuration object.
-  const DesignScale.config({
-    super.key,
-    required this.config,
-    required this.child,
+    this.policy = const ContainScalePolicy(),
+    this.limits = const ScaleLimits(),
   });
 
-  /// Configuration that drives scale resolution for this subtree.
-  final DesignScaleConfig config;
+  /// Creates a scaled subtree from an explicit immutable configuration object.
+  factory DesignScale.config({
+    Key? key,
+    required DesignScaleConfig config,
+    required Widget child,
+  }) {
+    return DesignScale(
+      key: key,
+      referenceSize: config.referenceSize,
+      policy: config.policy,
+      limits: config.limits,
+      child: child,
+    );
+  }
+
+  /// Design frame against which dimensions were authored.
+  final Size referenceSize;
+
+  /// Strategy that resolves a single uniform scale.
+  final ScalePolicy policy;
+
+  /// Optional bounds for the scale resolved by [policy].
+  final ScaleLimits limits;
 
   /// Widget subtree rendered in the virtual design coordinate system.
   final Widget child;
-
-  /// Design frame against which dimensions were authored.
-  Size get referenceSize => config.referenceSize;
-
-  /// Strategy that resolves a single uniform scale.
-  ScalePolicy get policy => config.policy;
-
-  /// Optional bounds for the scale resolved by [policy].
-  ScaleLimits get limits => config.limits;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +57,12 @@ class DesignScale extends StatelessWidget {
         'CupertinoApp.builder, or below an equivalent MediaQuery boundary.',
       );
     }
+
+    final config = DesignScaleConfig(
+      referenceSize: referenceSize,
+      policy: policy,
+      limits: limits,
+    );
 
     final result = policy.resolve(
       ScaleInput(
