@@ -29,7 +29,9 @@ jobs:
         run: flutter pub get
 
       - name: Check formatting
-        run: dart format --output=none --set-exit-if-changed lib test example benchmark
+        run: |
+          dart format lib test example benchmark
+          git diff --exit-code
 
       - name: Analyze
         run: flutter analyze
