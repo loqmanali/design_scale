@@ -1,9 +1,9 @@
 /// Optional bounds applied to a scale resolved by a `ScalePolicy`.
 class ScaleLimits {
   const ScaleLimits({this.min, this.max})
-    : assert(min == null || min > 0),
-      assert(max == null || max > 0),
-      assert(min == null || max == null || min <= max);
+      : assert(min == null || min > 0),
+        assert(max == null || max > 0),
+        assert(min == null || max == null || min <= max);
 
   /// Minimum allowed scale, or `null` for no lower bound.
   final double? min;
@@ -41,7 +41,8 @@ class ScaleLimits {
       throw StateError('ScaleLimits.max must be finite and greater than zero.');
     }
     if (minValue != null && maxValue != null && minValue > maxValue) {
-      throw StateError('ScaleLimits.min cannot be greater than ScaleLimits.max.');
+      throw StateError(
+          'ScaleLimits.min cannot be greater than ScaleLimits.max.');
     }
   }
 

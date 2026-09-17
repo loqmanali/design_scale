@@ -28,11 +28,24 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test example benchmark
+
       - name: Analyze
         run: flutter analyze
 
-      - name: Test
-        run: flutter test
+      - name: Test with coverage
+        run: flutter test --coverage
+
+      - name: Validate example
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+
+      - name: Pub publish dry run
+        run: flutter pub publish --dry-run
 
   minimum:
     name: Flutter 3.19.0
@@ -57,3 +70,10 @@ jobs:
 
       - name: Test
         run: flutter test
+
+      - name: Validate example
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
