@@ -109,9 +109,6 @@ final class RenderDesignScaleViewport extends RenderProxyBox {
     }
 
     child.layout(BoxConstraints.tight(_virtualSize));
-
-    final parentData = child.parentData! as BoxParentData;
-    parentData.offset = Offset.zero;
   }
 
   @override
