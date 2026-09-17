@@ -1,6 +1,5 @@
+import 'package:design_scale_example/main.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../lib/main.dart';
 
 void main() {
   testWidgets('example app renders through DesignScale', (tester) async {
