@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0-dev.3
+
+- Transform fold, hinge, and cutout bounds into virtual design coordinates.
+- Transform gesture thresholds so physical interaction distances remain stable.
+- Add explicit semantics-geometry coverage.
+- Add keyboard, foldable, resize, rotation, split-screen, and viewport-matrix tests.
+- Add deterministic golden coverage for portrait, large portrait, split-width, and landscape viewports.
+- Verify the full suite on Flutter 3.19.0 and the current stable channel.
+- Document the rounded display-corner limitation while Flutter 3.19 is supported.
+
 ## 0.1.0-dev.2
 
 - Replace the internal `FittedBox` implementation with a dedicated render viewport.

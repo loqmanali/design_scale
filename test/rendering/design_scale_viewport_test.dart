@@ -1,4 +1,5 @@
 import 'package:design_scale/src/rendering/design_scale_viewport.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -97,6 +98,56 @@ void main() {
     expect(tapCount, 1);
   });
 
+  testWidgets('applies the viewport transform to semantic bounds', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 1600);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+
+    final semanticsHandle = tester.ensureSemantics();
+
+    try {
+      final semanticsKey = GlobalKey();
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: DesignScaleViewport(
+            scale: 2,
+            virtualSize: const Size(400, 800),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 20,
+                  top: 30,
+                  width: 40,
+                  height: 50,
+                  child: Semantics(
+                    key: semanticsKey,
+                    container: true,
+                    label: 'Scaled target',
+                    child: const SizedBox.expand(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final node = tester.getSemantics(find.byKey(semanticsKey));
+      expect(node.label, 'Scaled target');
+      expect(
+        _semanticRectInRoot(node),
+        const Rect.fromLTWH(40, 60, 80, 100),
+      );
+    } finally {
+      semanticsHandle.dispose();
+    }
+  });
+
   testWidgets('updates layout and paint transforms when scale changes', (
     tester,
   ) async {
@@ -145,4 +196,24 @@ void main() {
       throwsArgumentError,
     );
   });
+}
+
+Rect _semanticRectInRoot(SemanticsNode node) {
+  final transforms = <Matrix4>[];
+  SemanticsNode? current = node;
+
+  while (current != null) {
+    final transform = current.transform;
+    if (transform != null) {
+      transforms.add(transform);
+    }
+    current = current.parent;
+  }
+
+  final transformToRoot = Matrix4.identity();
+  for (final transform in transforms.reversed) {
+    transformToRoot.multiply(transform);
+  }
+
+  return MatrixUtils.transformRect(transformToRoot, node.rect);
 }

@@ -13,8 +13,8 @@ In priority order:
 1. **Correctness** — the same inputs produce the same scale.
 2. **Predictability** — scaling behavior must be explicit and policy-driven.
 3. **Accessibility preservation** — do not override `TextScaler`, accessibility flags, or device pixel ratio.
-4. **Window adaptability** — react to the current Flutter `MediaQuery`, including resize and rotation.
-5. **Testability** — scale math is pure and testable without pumping widgets.
+4. **Window adaptability** — react to the current Flutter `MediaQuery`, including resize, rotation, split-screen, keyboard, and foldable geometry.
+5. **Testability** — scale math and geometry conversion are pure and testable without pumping widgets.
 6. **Extensibility** — new scale policies can be added without changing the rendering API.
 7. **Performance** — scale resolution is O(1) and no external runtime dependency is required.
 8. **Simplicity** — the default public API remains small.
@@ -30,6 +30,7 @@ In priority order:
 - `design_scale` never decides whether the application should use mobile, tablet, or desktop composition.
 - Integration happens below `MaterialApp`/`CupertinoApp` through their builder callback.
 - Layout, paint, hit testing, coordinate conversion, and semantics use the same transform.
+- Every logical-pixel position or distance exposed below `DesignScale` belongs to the virtual coordinate system.
 
 ## 4. Runtime flow
 
@@ -62,7 +63,7 @@ lib/src/
   config/       Public immutable configuration values
   domain/       Pure inputs, results, limits, policy contract
   policies/     Scale-policy implementations
-  media_query/  Flutter MediaQuery adapter
+  media_query/  Window geometry and MediaQuery adapters
   rendering/    Internal render viewport and coordinate mapping
 ```
 
@@ -81,7 +82,7 @@ virtualSize = viewportSize / scale
 
 This keeps the scale uniform and exposes any extra axis as virtual layout space instead of distorting the design.
 
-## 7. MediaQuery contract
+## 7. MediaQuery and window-geometry contract
 
 Spatial values are transformed into virtual design-space coordinates:
 
@@ -90,10 +91,12 @@ Spatial values are transformed into virtual design-space coordinates:
 - `viewPadding`
 - `viewInsets`
 - `systemGestureInsets`
+- every `displayFeatures.bounds` rectangle
+- `gestureSettings.touchSlop`
 
-Non-spatial platform/accessibility values remain unchanged, including device pixel ratio, text scaling, brightness, high contrast, navigation mode, and accessibility flags.
+Display-feature `type` and `state` are preserved. Non-spatial platform and accessibility values remain unchanged, including device pixel ratio, text scaling, brightness, high contrast, navigation mode, and accessibility flags.
 
-Foldable `displayFeatures` transformation is intentionally not claimed yet; explicit support must be added together with dedicated tests before the package advertises foldable support.
+`displayCornerRadii` is not transformed while Flutter 3.19 remains the minimum supported version because that release does not expose the property on `MediaQueryData`. This limitation is explicit rather than hidden behind dynamic version checks.
 
 ## 8. Rendering contract
 
@@ -110,12 +113,12 @@ The render object:
 
 The rendering implementation is not exported. Consumers depend only on `DesignScale`, `DesignScaleConfig`, the scale-policy contracts, and `DesignScaleScope`.
 
-## 9. Testing strategy
+## 9. Verification strategy
 
-- **Unit:** policy math, limits, invalid configuration.
-- **Widget:** MediaQuery transformation and scope behavior.
-- **Rendering:** virtual layout, paint transform, hit testing, coordinate conversion, and runtime updates.
-- **Golden:** representative phone/tablet/desktop viewports (next phase).
-- **Integration:** rotation, keyboard, resize, and platform verification (next phase).
+- **Unit:** policy math, limits, invalid configuration, and window-geometry conversion.
+- **Widget:** transformed `MediaQuery`, accessibility preservation, keyboard, foldable, resize, rotation, and split-screen scenarios.
+- **Rendering:** virtual layout, paint transform, hit testing, coordinate conversion, semantics geometry, and runtime updates.
+- **Golden:** deterministic reference, large portrait, split-width, and landscape output.
+- **Compatibility:** the full analyzer and test suite run on Flutter 3.19.0 and the current stable channel.
 
 Every production bug in scale calculation or coordinate transformation should become a regression test.

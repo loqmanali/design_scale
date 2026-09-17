@@ -55,8 +55,26 @@ Container(
 )
 ```
 
+## Window behavior
+
+The virtual coordinate system covers:
+
+- safe-area, keyboard, and system-gesture insets;
+- fold, hinge, and cutout bounds from `MediaQuery.displayFeatures`;
+- device gesture thresholds;
+- resize, rotation, and split-screen changes;
+- semantics, pointer hit testing, and coordinate conversion.
+
+Text scaling, accessibility preferences, platform brightness, and
+`devicePixelRatio` remain native Flutter values.
+
+Rounded display-corner radii are not transformed while Flutter 3.19 remains the
+minimum supported version.
+
 ## Scope
 
 `design_scale` owns **uniform design-space scaling**. Your application still owns adaptive composition using tools such as `LayoutBuilder` and breakpoints.
+
+The package is verified against Flutter 3.19.0 and the current stable Flutter channel.
 
 For architecture decisions and quality attributes, see [ARCHITECTURE.md](ARCHITECTURE.md) and [docs/adr](docs/adr).
