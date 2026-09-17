@@ -8,7 +8,6 @@ void main() {
     const limits = ScaleLimits(min: 0.75);
     const config = DesignScaleConfig(
       referenceSize: Size(400, 800),
-      policy: policy,
       limits: limits,
     );
     const input = ScaleInput(
@@ -20,6 +19,7 @@ void main() {
     final result = policy.resolve(input);
 
     expect(config.referenceSize, const Size(400, 800));
+    expect(config.policy, policy);
     expect(result.scale, 2);
     expect(result.virtualSize, const Size(400, 800));
     expect(result.isClamped, isFalse);
