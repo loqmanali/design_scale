@@ -107,42 +107,45 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
 
     final semanticsHandle = tester.ensureSemantics();
-    addTearDown(semanticsHandle.dispose);
 
-    final semanticsKey = GlobalKey();
+    try {
+      final semanticsKey = GlobalKey();
 
-    await tester.pumpWidget(
-      Directionality(
-        textDirection: TextDirection.ltr,
-        child: DesignScaleViewport(
-          scale: 2,
-          virtualSize: const Size(400, 800),
-          child: Stack(
-            children: [
-              Positioned(
-                left: 20,
-                top: 30,
-                width: 40,
-                height: 50,
-                child: Semantics(
-                  key: semanticsKey,
-                  container: true,
-                  label: 'Scaled target',
-                  child: const SizedBox.expand(),
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: DesignScaleViewport(
+            scale: 2,
+            virtualSize: const Size(400, 800),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 20,
+                  top: 30,
+                  width: 40,
+                  height: 50,
+                  child: Semantics(
+                    key: semanticsKey,
+                    container: true,
+                    label: 'Scaled target',
+                    child: const SizedBox.expand(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    final node = tester.getSemantics(find.byKey(semanticsKey));
-    expect(node.label, 'Scaled target');
-    expect(
-      _semanticRectInRoot(node),
-      const Rect.fromLTWH(40, 60, 80, 100),
-    );
+      final node = tester.getSemantics(find.byKey(semanticsKey));
+      expect(node.label, 'Scaled target');
+      expect(
+        _semanticRectInRoot(node),
+        const Rect.fromLTWH(40, 60, 80, 100),
+      );
+    } finally {
+      semanticsHandle.dispose();
+    }
   });
 
   testWidgets('updates layout and paint transforms when scale changes', (
