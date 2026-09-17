@@ -29,6 +29,7 @@ In priority order:
 - Scale math lives outside the widget/rendering layer.
 - `design_scale` never decides whether the application should use mobile, tablet, or desktop composition.
 - Integration happens below `MaterialApp`/`CupertinoApp` through their builder callback.
+- Layout, paint, hit testing, coordinate conversion, and semantics use the same transform.
 
 ## 4. Runtime flow
 
@@ -45,10 +46,11 @@ Flutter MediaQuery
    ScaleResult
       / \
      v   v
-virtual   rendering
-MediaQuery transform
-     \   /
-      v v
+virtual   RenderDesignScaleViewport
+MediaQuery     |
+transform      | layout / paint / hit test / semantics
+     \         /
+      v       v
   application subtree
 ```
 
@@ -61,7 +63,7 @@ lib/src/
   domain/       Pure inputs, results, limits, policy contract
   policies/     Scale-policy implementations
   media_query/  Flutter MediaQuery adapter
-  rendering/    Reserved for the dedicated render engine
+  rendering/    Internal render viewport and coordinate mapping
 ```
 
 Dependency direction is toward the domain contracts. Rendering and Flutter adapters may depend on domain types; domain math does not depend on widget state or app lifecycle.
@@ -91,18 +93,28 @@ Spatial values are transformed into virtual design-space coordinates:
 
 Non-spatial platform/accessibility values remain unchanged, including device pixel ratio, text scaling, brightness, high contrast, navigation mode, and accessibility flags.
 
-Foldable `displayFeatures` transformation is intentionally not claimed in the first architecture slice; explicit support must be added together with dedicated tests before the package advertises foldable support.
+Foldable `displayFeatures` transformation is intentionally not claimed yet; explicit support must be added together with dedicated tests before the package advertises foldable support.
 
-## 8. Rendering evolution
+## 8. Rendering contract
 
-The first slice uses Flutter's existing fitted rendering primitive so the domain and MediaQuery contracts can stabilize early. A dedicated `RenderDesignScaleViewport` is planned behind the same public contract for explicit layout, paint, hit-test, and semantics control.
+`DesignScaleViewport` is an internal `SingleChildRenderObjectWidget` backed by `RenderDesignScaleViewport`.
 
-The rendering implementation is private and replaceable; consumers must not depend on it.
+The render object:
+
+- lays out the child with tight virtual design-space constraints;
+- occupies the corresponding physical size;
+- paints with one top-left uniform scale transform;
+- inverse-transforms pointer positions for hit testing;
+- publishes the same transform through `applyPaintTransform` for coordinate conversion and semantics;
+- scales intrinsic dimensions and baselines into parent coordinates.
+
+The rendering implementation is not exported. Consumers depend only on `DesignScale`, `DesignScaleConfig`, the scale-policy contracts, and `DesignScaleScope`.
 
 ## 9. Testing strategy
 
 - **Unit:** policy math, limits, invalid configuration.
 - **Widget:** MediaQuery transformation and scope behavior.
+- **Rendering:** virtual layout, paint transform, hit testing, coordinate conversion, and runtime updates.
 - **Golden:** representative phone/tablet/desktop viewports (next phase).
 - **Integration:** rotation, keyboard, resize, and platform verification (next phase).
 
