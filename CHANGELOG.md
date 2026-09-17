@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0-dev.2
+
+- Replace the internal `FittedBox` implementation with a dedicated render viewport.
+- Keep layout, paint, hit testing, coordinate conversion, and semantics on one uniform transform.
+- Add rendering regression tests for virtual layout, transformed coordinates, pointer hit testing, and live scale updates.
+- Add ADR-0005 documenting the dedicated render-viewport decision.
+
 ## 0.1.0-dev.1
 
 - Establish the Architecture Kata foundation.
