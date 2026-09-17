@@ -8,7 +8,8 @@ void main() {
   ) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(800, 1600);
-    addTearDown(tester.view.reset);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
 
     MediaQueryData? observedMediaQuery;
     DesignScaleScope? observedScope;
