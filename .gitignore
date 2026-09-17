@@ -1,0 +1,18 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+build/
+coverage/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Platform-generated files
+**/Flutter/ephemeral/
+
+# OS
+.DS_Store
