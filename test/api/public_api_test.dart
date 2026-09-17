@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('release-candidate core API remains usable from the package barrel', () {
     const policy = ContainScalePolicy();
-    const limits = ScaleLimits(min: 0.75, max: 2);
+    const limits = ScaleLimits(min: 0.75);
     const config = DesignScaleConfig(
       referenceSize: Size(400, 800),
       policy: policy,
