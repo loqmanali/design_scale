@@ -64,18 +64,37 @@ void main() {
     expect(observedScope!.config, config);
   });
 
-  testWidgets('fails with an actionable error when MediaQuery is missing', (
-    tester,
-  ) async {
+  testWidgets('recalculates scale when the viewport changes', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 1600);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+
+    DesignScaleScope? observedScope;
+
     await tester.pumpWidget(
-      const DesignScale(
-        referenceSize: Size(375, 812),
-        child: SizedBox.shrink(),
+      MaterialApp(
+        builder: (context, child) {
+          return DesignScale(
+            referenceSize: const Size(400, 800),
+            child: Builder(
+              builder: (context) {
+                observedScope = DesignScaleScope.of(context);
+                return const SizedBox.shrink();
+              },
+            ),
+          );
+        },
+        home: const SizedBox.shrink(),
       ),
     );
 
-    final exception = tester.takeException();
-    expect(exception, isA<FlutterError>());
-    expect(exception.toString(), contains('MaterialApp.builder'));
+    expect(observedScope!.result.scale, 2);
+
+    tester.view.physicalSize = const Size(600, 1200);
+    await tester.pump();
+
+    expect(observedScope!.result.scale, 1.5);
+    expect(observedScope!.result.virtualSize, const Size(400, 800));
   });
 }
