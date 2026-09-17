@@ -20,7 +20,8 @@ class ScaleResult {
     required ScaleLimits limits,
   }) {
     if (!rawScale.isFinite || rawScale <= 0) {
-      throw StateError('A scale policy must resolve a finite scale greater than zero.');
+      throw StateError(
+          'A scale policy must resolve a finite scale greater than zero.');
     }
 
     final scale = limits.apply(rawScale);
@@ -30,7 +31,8 @@ class ScaleResult {
       scale: scale,
       viewportSize: viewportSize,
       referenceSize: referenceSize,
-      virtualSize: Size(viewportSize.width / scale, viewportSize.height / scale),
+      virtualSize:
+          Size(viewportSize.width / scale, viewportSize.height / scale),
       isClamped: scale != rawScale,
     );
   }
@@ -67,11 +69,11 @@ class ScaleResult {
 
   @override
   int get hashCode => Object.hash(
-    rawScale,
-    scale,
-    viewportSize,
-    referenceSize,
-    virtualSize,
-    isClamped,
-  );
+        rawScale,
+        scale,
+        viewportSize,
+        referenceSize,
+        virtualSize,
+        isClamped,
+      );
 }
