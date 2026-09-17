@@ -122,7 +122,7 @@ The rendering implementation is not exported. Consumers depend only on the docum
 
 ## 9. Public API and diagnostics boundary
 
-The release-candidate core surface is documented in `docs/public-api.md`. Debug diagnostics are intentionally exported from `package:design_scale/design_scale_debug.dart` rather than the core barrel.
+The release-candidate core surface is documented in `doc/public-api.md`. Debug diagnostics are intentionally exported from `package:design_scale/design_scale_debug.dart` rather than the core barrel.
 
 This allows diagnostic presentation to evolve without forcing applications that only need scaling to depend on debug-specific UI. `DesignScaleDebugOverlay` is inactive outside debug builds.
 
