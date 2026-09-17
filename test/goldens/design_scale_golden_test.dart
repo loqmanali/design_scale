@@ -38,9 +38,9 @@ void main() {
             textDirection: TextDirection.ltr,
             child: RepaintBoundary(
               key: boundaryKey,
-              child: DesignScale(
-                referenceSize: const Size(160, 320),
-                child: const ColoredBox(
+              child: const DesignScale(
+                referenceSize: Size(160, 320),
+                child: ColoredBox(
                   color: Color(0xFFFFFFFF),
                   child: Stack(
                     children: [
