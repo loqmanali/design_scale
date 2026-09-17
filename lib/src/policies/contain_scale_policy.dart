@@ -10,8 +10,10 @@ final class ContainScalePolicy implements ScalePolicy {
 
   @override
   ScaleResult resolve(ScaleInput input) {
-    _validateSize(input.viewportSize.width, input.viewportSize.height, 'viewportSize');
-    _validateSize(input.referenceSize.width, input.referenceSize.height, 'referenceSize');
+    _validateSize(
+        input.viewportSize.width, input.viewportSize.height, 'viewportSize');
+    _validateSize(
+        input.referenceSize.width, input.referenceSize.height, 'referenceSize');
 
     final widthScale = input.viewportSize.width / input.referenceSize.width;
     final heightScale = input.viewportSize.height / input.referenceSize.height;
@@ -27,7 +29,8 @@ final class ContainScalePolicy implements ScalePolicy {
 
   static void _validateSize(double width, double height, String name) {
     if (!width.isFinite || !height.isFinite || width <= 0 || height <= 0) {
-      throw ArgumentError('$name must contain finite dimensions greater than zero.');
+      throw ArgumentError(
+          '$name must contain finite dimensions greater than zero.');
     }
   }
 }
