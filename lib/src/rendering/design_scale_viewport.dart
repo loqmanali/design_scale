@@ -11,9 +11,7 @@ final class DesignScaleViewport extends SingleChildRenderObjectWidget {
     required this.scale,
     required this.virtualSize,
     super.child,
-  }) : assert(scale > 0),
-       assert(virtualSize.width > 0),
-       assert(virtualSize.height > 0);
+  }) : assert(scale > 0);
 
   /// Uniform scale from virtual design coordinates to physical coordinates.
   final double scale;
@@ -110,10 +108,7 @@ final class RenderDesignScaleViewport extends RenderProxyBox {
       return;
     }
 
-    child.layout(
-      BoxConstraints.tight(_virtualSize),
-      parentUsesSize: false,
-    );
+    child.layout(BoxConstraints.tight(_virtualSize));
 
     final parentData = child.parentData! as BoxParentData;
     parentData.offset = Offset.zero;
