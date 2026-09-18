@@ -27,9 +27,12 @@ jobs:
         with:
           channel: stable
 
+      - name: Resolve dependencies
+        run: flutter pub get
+
       - name: Apply const cleanup and format
         run: |
-          sed -i '0,/          SizedBox(/s//          const SizedBox/' example/lib/emulator_comparison_app.dart
+          python3 -c "from pathlib import Path; p=Path('example/lib/emulator_comparison_app.dart'); s=p.read_text(); old='          SizedBox(\n            width: 82,\n            height: 82,\n            child: Stack('; new='          const SizedBox(\n            width: 82,\n            height: 82,\n            child: Stack('; assert old in s; p.write_text(s.replace(old, new, 1))"
           dart format example/lib/emulator_comparison_app.dart
 
       - name: Commit formatter output
