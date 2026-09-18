@@ -272,9 +272,9 @@ class _HeroCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(22),
       ),
-      child: Row(
+      child: const Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -308,21 +308,21 @@ class _HeroCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 16),
-          const SizedBox(
+          SizedBox(width: 16),
+          SizedBox(
             width: 82,
             height: 82,
             child: Stack(
               alignment: Alignment.center,
               children: [
-                const CircularProgressIndicator(
+                CircularProgressIndicator(
                   value: 0.72,
                   strokeWidth: 8,
                   strokeCap: StrokeCap.round,
                   backgroundColor: Color(0x29FFFFFF),
                   color: Color(0xFF9FF0D0),
                 ),
-                const Icon(
+                Icon(
                   Icons.trending_up_rounded,
                   color: Colors.white,
                   size: 30,
