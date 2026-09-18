@@ -1,0 +1,10 @@
+Android emulator comparison
+Model: Android SDK built for x86_64
+API: 35
+Physical size: 1080x1920
+Override size: 720x1280
+Physical density: 420
+Override density: 320
+Reference design: 375x812
+Before target: example/lib/main_before.dart
+After target: example/lib/main_after.dart
