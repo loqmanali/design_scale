@@ -2,7 +2,7 @@
 
 Reference-based design scaling for Flutter.
 
-`design_scale` lets an application author against one design reference size while preserving Flutter's native layout, window, input, and accessibility model. It provides **uniform design-space scaling**; it is intentionally **not** an adaptive-layout, device-detection, or breakpoint framework.
+`design_scale` lets an application author against one design reference size while preserving Flutter's native layout, window, input, and accessibility model. The core library provides **uniform design-space scaling**, not device detection or automatic layout composition. An optional, experimental adaptive library adds explicit window-class selection without changing the core API.
 
 ## Status
 
@@ -83,7 +83,48 @@ LayoutBuilder(
 )
 ```
 
+**Coordinate note:** `LayoutBuilder` below `DesignScale` measures **virtual**
+space. Its thresholds are design-space thresholds, not unscaled window-width
+thresholds. A large window can have a compact virtual width. For window-class
+selection before scaling, use the optional adaptive library below.
+
 In landscape, split-screen, desktop, and tablet scenarios, extra space is exposed as virtual layout space rather than independently stretching width and height.
+
+## Optional adaptive composition (unreleased)
+
+```dart
+import 'package:design_scale/design_scale_adaptive.dart';
+```
+
+`AdaptiveDesignScale` selects reference sizes using the original window width.
+`AdaptiveBuilder` selects your route layout. Configuration and composition are
+separate, keeping the same navigator child across class changes.
+
+```dart
+MaterialApp(
+  builder: (context, child) => AdaptiveDesignScale(
+    compact: const AdaptiveVariant(referenceSize: Size(375, 812)),
+    medium: const AdaptiveVariant(referenceSize: Size(768, 1024)),
+    expanded: const AdaptiveVariant(referenceSize: Size(1440, 900)),
+    child: child ?? const SizedBox.shrink(),
+  ),
+  home: AdaptiveBuilder(
+    compact: (_) => const CompactLayout(),
+    medium: (_) => const MediumLayout(),
+    expanded: (_) => const ExpandedLayout(),
+  ),
+)
+```
+
+The three layout widgets above are supplied by your application. Defaults are
+`<600`, `600..<840`, and `>=840` **unscaled logical pixels**, with configurable
+boundaries. This is window-level adaptation, not hardware detection or automatic
+hinge-aware pane layout. Hoist shared business/form state above layout variants.
+
+See the [adaptive guide](doc/adaptive.md), [architecture decision](doc/adr/0009-optional-adaptive-composition.md),
+and [validation status](doc/adaptive-validation.md). The new library is an
+unvalidated feature-branch implementation, not a published or tested release.
+The existing core import is unchanged.
 
 ## Window and input behavior
 

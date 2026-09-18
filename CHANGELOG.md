@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — optional adaptive composition
+
+- Add the opt-in `design_scale_adaptive.dart` library without changing core exports.
+- Select window classes from original logical width before scaling.
+- Add configurable breakpoints, variant/layout fallback, scope, and typed values.
+- Keep one navigator child across reference-size changes; shared layout state remains application-owned.
+- Add an adaptive example and authored model/widget/example regression tests.
+- Document integration boundaries, experimental API, and pending Flutter validation.
+- No version bump, workflow change, CI execution, or publication in this change.
+
 ## 0.1.0-rc.1
 
 - Freeze the release-candidate core public API.
