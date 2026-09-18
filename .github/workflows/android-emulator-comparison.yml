@@ -1,0 +1,126 @@
+name: Android emulator before and after
+
+on:
+  push:
+    branches:
+      - test/android-emulator-comparison
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    name: Capture Android emulator screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Android host project
+        working-directory: example
+        run: |
+          flutter create \
+            --platforms=android \
+            --org dev.designscale \
+            --project-name design_scale_example \
+            --no-pub \
+            .
+          flutter pub get
+
+      - name: Build baseline and DesignScale APKs
+        working-directory: example
+        run: |
+          mkdir -p ../artifacts/apks ../artifacts/emulator
+
+          flutter build apk --debug --target lib/main_before.dart
+          cp build/app/outputs/flutter-apk/app-debug.apk ../artifacts/apks/before.apk
+
+          flutter clean
+          flutter pub get
+          flutter build apk --debug --target lib/main_after.dart
+          cp build/app/outputs/flutter-apk/app-debug.apk ../artifacts/apks/after.apk
+
+      - name: Run emulator and capture screenshots
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7_pro
+          disable-animations: true
+          emulator-options: >-
+            -no-window
+            -gpu swiftshader_indirect
+            -no-snapshot
+            -noaudio
+            -no-boot-anim
+            -camera-back none
+            -camera-front none
+          script: |
+            set -euo pipefail
+
+            APP_ID='dev.designscale.design_scale_example'
+            OUTPUT_DIR='artifacts/emulator'
+
+            adb wait-for-device
+            adb shell wm size 1600x2560
+            adb shell wm density 320
+            adb shell settings put system font_scale 1.0
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+            adb shell input keyevent 82 || true
+
+            {
+              echo 'Android emulator comparison environment'
+              adb shell getprop ro.build.version.release
+              adb shell getprop ro.build.version.sdk
+              adb shell wm size
+              adb shell wm density
+            } > "$OUTPUT_DIR/device-info.txt"
+
+            capture() {
+              apk_path="$1"
+              output_name="$2"
+
+              adb install -r "$apk_path"
+              adb shell pm clear "$APP_ID" >/dev/null
+              adb shell am force-stop "$APP_ID"
+              adb shell am start -W -n "$APP_ID/.MainActivity"
+              sleep 5
+              adb exec-out screencap -p > "$OUTPUT_DIR/$output_name.png"
+              file "$OUTPUT_DIR/$output_name.png"
+            }
+
+            capture 'artifacts/apks/before.apk' 'before'
+            capture 'artifacts/apks/after.apk' 'after'
+
+      - name: Upload comparison screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-scale-android-emulator-comparison
+          path: artifacts/emulator
+          if-no-files-found: error
+          retention-days: 7
