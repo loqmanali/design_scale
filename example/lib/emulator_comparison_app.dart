@@ -316,12 +316,12 @@ class _HeroCard extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   value: 0.72,
                   strokeWidth: 8,
                   strokeCap: StrokeCap.round,
-                  backgroundColor: Colors.white.withOpacity(0.16),
-                  color: const Color(0xFF9FF0D0),
+                  backgroundColor: Color(0x29FFFFFF),
+                  color: Color(0xFF9FF0D0),
                 ),
                 const Icon(
                   Icons.trending_up_rounded,
