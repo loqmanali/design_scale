@@ -99,7 +99,7 @@ jobs:
             -camera-back none
             -camera-front none
           script: |
-            set -euo pipefail
+            set -eu
 
             APP_ID='dev.designscale.design_scale_example'
             OUTPUT_DIR='artifacts/emulator'
