@@ -27,30 +27,10 @@ jobs:
         with:
           channel: stable
 
-      - name: Apply const cleanup
+      - name: Apply const cleanup and format
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          path = Path('example/lib/emulator_comparison_app.dart')
-          source = path.read_text()
-          old = '''          SizedBox(
-            width: 82,
-            height: 82,
-            child: Stack(
-'''
-          new = '''          const SizedBox(
-            width: 82,
-            height: 82,
-            child: Stack(
-'''
-          if old in source:
-              source = source.replace(old, new, 1)
-              path.write_text(source)
-          PY
-
-      - name: Format Dart sources
-        run: dart format example/lib/emulator_comparison_app.dart
+          sed -i '0,/          SizedBox(/s//          const SizedBox/' example/lib/emulator_comparison_app.dart
+          dart format example/lib/emulator_comparison_app.dart
 
       - name: Commit formatter output
         run: |
