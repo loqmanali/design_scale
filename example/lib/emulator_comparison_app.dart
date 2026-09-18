@@ -50,9 +50,8 @@ class _ComparisonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaSize = MediaQuery.sizeOf(context);
     final scope = designScaleEnabled ? DesignScaleScope.of(context) : null;
-    final modeTitle = designScaleEnabled
-        ? 'WITH design_scale'
-        : 'WITHOUT design_scale';
+    final modeTitle =
+        designScaleEnabled ? 'WITH design_scale' : 'WITHOUT design_scale';
     final geometryText = designScaleEnabled
         ? 'Virtual ${_formatSize(mediaSize)}  •  Scale ${scope!.result.scale.toStringAsFixed(2)}×'
         : 'Viewport ${_formatSize(mediaSize)}  •  Scale 1.00×';
@@ -310,7 +309,7 @@ class _HeroCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          SizedBox(
+          const SizedBox(
             width: 82,
             height: 82,
             child: Stack(
