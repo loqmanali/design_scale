@@ -24,8 +24,6 @@ jobs:
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/share/boost
-          sudo rm -rf /usr/local/lib/android/sdk/ndk
-          sudo rm -rf /usr/local/lib/android/sdk/cmake
           docker system prune --all --force || true
           df -h /
 
@@ -45,6 +43,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Generate Android host project
         working-directory: example
@@ -95,7 +94,7 @@ jobs:
             -camera-back none
             -camera-front none
           script: |
-            set -euo pipefail
+            set -eu
 
             APP_ID='dev.designscale.design_scale_example'
             OUTPUT_DIR='artifacts/emulator'
