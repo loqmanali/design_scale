@@ -3,15 +3,11 @@ name: Android emulator before and after
 on:
   push:
     branches:
-      - test/android-emulator-comparison
+      - test/android-emulator-capture-final
   workflow_dispatch:
 
 permissions:
   contents: read
-
-concurrency:
-  group: android-emulator-comparison-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   capture:
