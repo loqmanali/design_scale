@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const cases = <Size, String>{
+  final cases = <Size, String>{
     Size(375, 812): 'compact',
     Size(800, 1280): 'medium',
     Size(1440, 900): 'expanded',

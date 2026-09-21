@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AdaptiveBreakpoints', () {
     const breakpoints = AdaptiveBreakpoints();
-    const cases = <double, AdaptiveWindowClass>{
+    final cases = <double, AdaptiveWindowClass>{
       0: AdaptiveWindowClass.compact,
       599.999: AdaptiveWindowClass.compact,
       600: AdaptiveWindowClass.medium,

@@ -40,7 +40,7 @@ Widget _environment(MediaQueryData data, Widget child) {
 }
 
 void main() {
-  const cases = <Size, AdaptiveWindowClass>{
+  final cases = <Size, AdaptiveWindowClass>{
     Size(375, 812): AdaptiveWindowClass.compact,
     Size(599, 900): AdaptiveWindowClass.compact,
     Size(600, 900): AdaptiveWindowClass.medium,
@@ -169,7 +169,8 @@ void main() {
         },
         medium: (context) {
           mediumCalls += 1;
-          const columns = AdaptiveValue<int>(compact: 1, medium: 2, expanded: 4);
+          const columns =
+              AdaptiveValue<int>(compact: 1, medium: 2, expanded: 4);
           return Text('columns: ${columns.resolve(context)}');
         },
         expanded: (_) {
@@ -272,7 +273,8 @@ void main() {
     expect(tester.binding.hasScheduledFrame, isFalse);
   });
 
-  testWidgets('navigation and route state survive class changes', (tester) async {
+  testWidgets('navigation and route state survive class changes',
+      (tester) async {
     _setViewport(tester, const Size(400, 800));
     final navigatorKey = GlobalKey<NavigatorState>();
     await tester.pumpWidget(_app(
@@ -379,7 +381,8 @@ void main() {
     }));
   });
 
-  testWidgets('rejects nested scaling instead of double scaling', (tester) async {
+  testWidgets('rejects nested scaling instead of double scaling',
+      (tester) async {
     _setViewport(tester, const Size(400, 800));
     await tester.pumpWidget(_environment(
       const MediaQueryData(size: Size(400, 800)),
